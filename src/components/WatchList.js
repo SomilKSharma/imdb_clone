@@ -30,11 +30,6 @@ function WatchList() {
                             </div>
                         </th>
                         <th>
-                            <div>
-                                Genres
-                            </div>
-                        </th>
-                        <th>
                             <button>Delete</button>
                         </th>
                     </tr>
@@ -46,7 +41,7 @@ function WatchList() {
                         return (
                             <tr key={element.id} className="hover:bg-white-50">
                                 <td className="flex items-center px-6 py-4 font-normal text-white-900 space-x-2">
-                                    <img className="h-[6rem] w-[10rem] object-fit" alt="A poster" src={`https://image.tmdb.org/t/p/original/t/p/w500/${element.poster_path}`} />
+                                    <img className="h-[15rem] w-[10rem] object-fit" alt="A poster" src={`https://image.tmdb.org/t/p/original/t/p/w500/${element.poster_path}`} />
                                     <div>{element.title}</div>
                                 </td>
                                 <td className="px-2 pl-4 py-4">
@@ -54,9 +49,6 @@ function WatchList() {
                                 </td>
                                 <td className="px-2 pl-4 py-4">
                                     {element.popularity}
-                                </td>
-                                <td className="px-1 py-4">
-                                    Comdey
                                 </td>
                             </tr>
                         )
