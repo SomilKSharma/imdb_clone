@@ -7,8 +7,10 @@ function Movies() {
     const [movie, setMovie] = useState([])
     // get page counter
     const [page, setPage] = useState(1)
-    // watchlist state
-    const [watch, setWatch] = useState([])
+    const [watch, setWatch] = useState(() => {
+        const storedWatchlist = localStorage.getItem('watchThese');
+        return storedWatchlist ? JSON.parse(storedWatchlist) : [];
+    });
 
     // function to change  page
     function increment() {
@@ -20,13 +22,18 @@ function Movies() {
         }
     }
     // function to add into watchlist
-    function addWatchList(id) {
-        setWatch([...watch, id])
+    function addWatchList(element) {
+        setWatch([...watch, element])
     }
     // function to remove from watchlist
-    function removeWatchList(id) {
-        setWatch(watch.filter(element => element !== id))
+    function removeWatchList(element) {
+        setWatch(watch.filter(elem => elem.id !== element.id))
     }
+    // use effect to update local localStorage
+    useEffect(() => {
+        localStorage.setItem('watchThese', JSON.stringify(watch));
+    }, [watch])
+
 
     // use axios for handling API as a promise
     // use effect to change api call with change in page
@@ -56,15 +63,29 @@ function Movies() {
                             boxShadow: '10px 10px 20px rgba(255, 0, 0)'
                         }}>
                             {/* component for watchlist */}
-                            <div onClick={
-                                watch.includes(element.id) ? () => removeWatchList(element.id) : () => addWatchList(element.id)
-                            } className="p-2 bg-white cursor-pointer rounded-xl absolute right-2 top-2">
-                                {watch.includes(element.id) ? `❌` : `🥰`}
+                            <div
+                                onClick={() => {
+                                    console.log('Clicked on element:', element);
+                                    if (watch.some((watchedElement) => watchedElement.id === element.id)) {
+                                        console.log('Removing from watchlist');
+                                        removeWatchList(element);
+                                    } else {
+                                        console.log('Adding to watchlist');
+                                        addWatchList(element);
+                                    }
+
+                                }
+                                }
+                                className="p-2 bg-white cursor-pointer rounded-xl absolute right-2 top-2"
+                            >
+                                {watch.some((watchedElement) => watchedElement.id === element.id) ? `❌` : `🥰`}
                             </div>
                             {/* component for title at the bottom of the card */}
                             <div className="text-center w-full bg-gray-900 text-white font-bold">
                                 {element.title}
+                                {console.log(watch)}
                             </div>
+
                         </div>
                     )
                 }
@@ -73,7 +94,7 @@ function Movies() {
             </div>
             {/* get Pagination */}
             <Pagination decrement={decrement} page={page} increment={increment} />
-        </div>
+        </div >
     )
 }
 

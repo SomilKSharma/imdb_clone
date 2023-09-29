@@ -10,7 +10,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
-    <>
+    <nav style={{ backgroundColor: `black` }}>
       {/* Routed components */}
       <BrowserRouter>
         {/* navbar component */}
@@ -27,7 +27,7 @@ function App() {
           <Route path="/watchlist" element={<WatchList />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </nav>
   );
 }
 

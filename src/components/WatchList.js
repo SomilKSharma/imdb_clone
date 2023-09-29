@@ -1,16 +1,18 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 function WatchList() {
+    // create a state
+    const [moviesArray, setMoviesArray] = useState([])
+    // useEffect hook to store local localStorage
+    useEffect(() => {
+        setMoviesArray(JSON.parse(localStorage.getItem('watchThese')))
+    }, [])
 
-    // movies array dummy
-    const moviesArray = []
     return (
-        <div style={{
-            backgroundColor: 'black'
-        }} className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
-            <table style={{
-                boxShadow: '10px 10px 20px rgba(255, 0, 0)'
-            }} className="w-full font-2xl border-collapse bg-black text-left text-white">
+        <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
+            <table className="w-full font-2xl border-collapse bg-black text-left text-white" style={{
+                boxShadow: '10px 10px 50px rgba(255, 0, 0)'
+            }} >
                 {/* get the table head */}
                 <thead>
                     <tr>
@@ -42,7 +44,7 @@ function WatchList() {
                     {/* map through the movies array */}
                     {moviesArray.map((element) => {
                         return (
-                            <tr className="hover:bg-white-50">
+                            <tr key={element.id} className="hover:bg-white-50">
                                 <td className="flex items-center px-6 py-4 font-normal text-white-900 space-x-2">
                                     <img className="h-[6rem] w-[10rem] object-fit" alt="A poster" src={`https://image.tmdb.org/t/p/original/t/p/w500/${element.poster_path}`} />
                                     <div>{element.title}</div>
