@@ -8,6 +8,44 @@ function WatchList() {
         setMoviesArray(JSON.parse(localStorage.getItem('watchThese')))
     }, [])
 
+
+    // write a function to sort the array
+    function ratingSort(direction) {
+        setMoviesArray((prevMoviesArray) => {
+            return [...prevMoviesArray].sort((objA, objB) => {
+                if (direction === 1) {
+                    return objB.vote_average - objA.vote_average;
+                } else {
+                    return objA.vote_average - objB.vote_average;
+                }
+            });
+        });
+    }
+
+    function popSort(direction) {
+        setMoviesArray((prevMoviesArray) => {
+            return [...prevMoviesArray].sort((objA, objB) => {
+                if (direction === 1) {
+                    return objB.popularity - objA.popularity;
+                } else {
+                    return objA.popularity - objB.popularity;
+                }
+            });
+        });
+    }
+
+    // update local storage on deletion
+    function deleteStorage(element) {
+        setMoviesArray((prevMoviesArray) => {
+            return [...prevMoviesArray].filter((elem) =>
+                element.id !== elem.id)
+        })
+    }
+    // useEffect hook to update local storage whenever moviesArray changes
+    useEffect(() => {
+        localStorage.setItem('watchThese', JSON.stringify(moviesArray));
+    }, [moviesArray]);
+
     return (
         <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
             <table className="w-full font-2xl border-collapse bg-black text-left text-white" style={{
@@ -18,15 +56,41 @@ function WatchList() {
                     <tr>
                         <th className="px-6 py-4 font-medium">Name</th>
                         <th>
-                            <div className="flex ">
+                            <div className="flex px-3">
+                                <div onClick={
+                                    () => ratingSort(1)
+                                } style={{ cursor: "pointer" }}>
+                                    ⇧
+                                </div>
                                 <div>
                                     Rating
                                 </div>
+                                {/* button for sorting */}
+                                <div onClick={
+                                    () => ratingSort(-1)
+                                } style={{ cursor: "pointer" }}>
+                                    ⇩
+                                </div>
+
                             </div>
                         </th>
                         <th>
-                            <div>
-                                Popularity
+                            <div className="flex px-3">
+                                <div onClick={
+                                    () => popSort(1)
+                                } style={{ cursor: "pointer" }}>
+                                    ⇧
+                                </div>
+                                <div>
+                                    Popularity
+                                </div>
+                                {/* button for sorting */}
+                                <div onClick={
+                                    () => popSort(-1)
+                                } style={{ cursor: "pointer" }}>
+                                    ⇩
+                                </div>
+
                             </div>
                         </th>
                         <th>
@@ -49,6 +113,11 @@ function WatchList() {
                                 </td>
                                 <td className="px-2 pl-4 py-4">
                                     {element.popularity}
+                                </td>
+                                <td
+                                    onClick={() => deleteStorage(element)}
+                                    className="pl-3" style={{ cursor: "pointer" }}>
+                                    ❌
                                 </td>
                             </tr>
                         )
